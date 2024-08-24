@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <!-- Define properties for file paths and log levels -->
+    <Properties>
+        <Property name="logPath">${sys:user.dir}/logs/app.log</Property>
+        <Property name="logLevel">Debug</Property>
+    </Properties>
+
+    <!-- Define appenders -->
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+        </Console>
+
+        <!-- Rolling File Appender -->
+        <RollingFile name="FileAppender" fileName="${logPath}"
+                     filePattern="${logPath}-%d{yyyy-MM-dd}.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+            <Policies>
+                <!-- Roll over the log file every day -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- Optional: Roll over the log file if it exceeds 10 MB -->
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+    </Appenders>
+
+    <!-- Define loggers -->
+    <Loggers>
+        <!-- Root logger configuration -->
+        <Root level="${logLevel}">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Root>
+
+        <!-- Example of a specific logger configuration -->
+        <Logger name="com.example" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
